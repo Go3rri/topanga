@@ -1,13 +1,13 @@
 //
-//  unjail.h
+//  jailbreak.h
 //  extra_recipe
 //
-//  Created by xerub on 16/05/2017.
-//  Copyright © 2017 xerub. All rights reserved.
+//  Created by Abraham Masri @cheesecakeufo on 16/05/2017.
+//  Copyright © 2017 Abraham Masri @cheesecakeufo. All rights reserved.
 //
 
-#ifndef unjail_h
-#define unjail_h
+#ifndef jailbreak_h
+#define jailbreak_h
 
 #include <dlfcn.h>
 #include <copyfile.h>
@@ -21,27 +21,17 @@
 #include <sys/utsname.h>
 #include <Foundation/Foundation.h>
 
-extern mach_port_t tfp0;
-//extern uint64_t kaslr_shift;
+
 extern uint64_t kernel_base;
 extern uint64_t kernel_task;
 extern uint64_t kaslr_slide;
 
-
-size_t kread(uint64_t where, void *p, size_t size);
-uint64_t kread_uint64(uint64_t where);
-uint32_t kread_uint32(uint64_t where);
-size_t kwrite(uint64_t where, const void *p, size_t size);
-size_t kwrite_uint64(uint64_t where, uint64_t value);
-size_t kwrite_uint32(uint64_t where, uint32_t value);
-
-void kx2(uint64_t fptr, uint64_t arg1, uint64_t arg2);
-uint32_t kx5(uint64_t fptr, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
-
+uint64_t get_proc_for_pid(pid_t target_pid);
+pid_t get_pid_for_name(char *proc_name);
 
 
 kern_return_t mount_rootfs(void);
 kern_return_t unpack_bootstrap(void);
 kern_return_t go_kppless();
 
-#endif /* unjail_h */
+#endif /* jailbreak_h */

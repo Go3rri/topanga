@@ -7,14 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		75300F231FE43948008C375D /* tar in Resources */ = {isa = PBXBuildFile; fileRef = 75300F211FE43948008C375D /* tar */; };
+		30A93B5B1FE4763F001AE23A /* uicache in Resources */ = {isa = PBXBuildFile; fileRef = 30A93B5A1FE4763E001AE23A /* uicache */; };
+		30A93B5D1FE4C04C001AE23A /* Cydia in Resources */ = {isa = PBXBuildFile; fileRef = 30A93B5C1FE4C04C001AE23A /* Cydia */; };
+		30A93B5F1FE4C0F3001AE23A /* xx.plist in Resources */ = {isa = PBXBuildFile; fileRef = 30A93B5E1FE4C0F3001AE23A /* xx.plist */; };
+		30A93B621FE4C3F6001AE23A /* data.tar in Resources */ = {isa = PBXBuildFile; fileRef = 30A93B611FE4C3F6001AE23A /* data.tar */; };
 		75300F241FE43948008C375D /* bootstrap.tar in Resources */ = {isa = PBXBuildFile; fileRef = 75300F221FE43948008C375D /* bootstrap.tar */; };
 		75300F271FE439E4008C375D /* reload in Resources */ = {isa = PBXBuildFile; fileRef = 75300F251FE439E3008C375D /* reload */; };
 		75300F281FE439E4008C375D /* launchctl in Resources */ = {isa = PBXBuildFile; fileRef = 75300F261FE439E3008C375D /* launchctl */; };
 		7543BE7A1FDF24F50006745F /* jailbreak.m in Sources */ = {isa = PBXBuildFile; fileRef = 7543BE741FDF24F50006745F /* jailbreak.m */; };
-		7543BE7B1FDF24F50006745F /* patchfinder64_11.c in Sources */ = {isa = PBXBuildFile; fileRef = 7543BE751FDF24F50006745F /* patchfinder64_11.c */; };
+		7543BE7B1FDF24F50006745F /* patchfinder64_11.m in Sources */ = {isa = PBXBuildFile; fileRef = 7543BE751FDF24F50006745F /* patchfinder64_11.m */; };
 		7543BE7C1FDF24F50006745F /* libjb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7543BE761FDF24F50006745F /* libjb.a */; };
-		75D4B0741FE4524B005BF959 /* bootstrap in Resources */ = {isa = PBXBuildFile; fileRef = 75D4B0731FE4524B005BF959 /* bootstrap */; };
 		B003EB351FC583CB00C58441 /* kmem.c in Sources */ = {isa = PBXBuildFile; fileRef = B003EB331FC583CA00C58441 /* kmem.c */; };
 		B003EB381FC5863800C58441 /* find_port.c in Sources */ = {isa = PBXBuildFile; fileRef = B003EB361FC5863800C58441 /* find_port.c */; };
 		B003EB3B1FC58F4900C58441 /* kdbg.c in Sources */ = {isa = PBXBuildFile; fileRef = B003EB391FC58F4900C58441 /* kdbg.c */; };
@@ -23,7 +25,6 @@
 		B07A02411FB09B6F0018ACE5 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B07A02401FB09B6F0018ACE5 /* ViewController.m */; };
 		B07A02441FB09B6F0018ACE5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B07A02421FB09B6F0018ACE5 /* Main.storyboard */; };
 		B07A02461FB09B6F0018ACE5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B07A02451FB09B6F0018ACE5 /* Assets.xcassets */; };
-		B07A02491FB09B6F0018ACE5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B07A02471FB09B6F0018ACE5 /* LaunchScreen.storyboard */; };
 		B07A024C1FB09B6F0018ACE5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B07A024B1FB09B6F0018ACE5 /* main.m */; };
 		B07A02541FB09C3D0018ACE5 /* async_wake.m in Sources */ = {isa = PBXBuildFile; fileRef = B07A02521FB09C3D0018ACE5 /* async_wake.m */; };
 		B0D79D621FDED41000B4F233 /* README in Resources */ = {isa = PBXBuildFile; fileRef = B0D79D611FDED41000B4F233 /* README */; };
@@ -33,18 +34,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		7518FFB11FDF22F60004F348 /* bootstrap.dmg */ = {isa = PBXFileReference; lastKnownFileType = file; path = bootstrap.dmg; sourceTree = "<group>"; };
-		75300F211FE43948008C375D /* tar */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = tar; sourceTree = "<group>"; };
+		30A93B5A1FE4763E001AE23A /* uicache */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = uicache; sourceTree = "<group>"; };
+		30A93B5C1FE4C04C001AE23A /* Cydia */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = Cydia; sourceTree = "<group>"; };
+		30A93B5E1FE4C0F3001AE23A /* xx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = xx.plist; path = "../../cydia_1.1.30_iphoneos-arm/data/Applications/Cydia.app/xx.plist"; sourceTree = "<group>"; };
+		30A93B611FE4C3F6001AE23A /* data.tar */ = {isa = PBXFileReference; lastKnownFileType = archive.tar; path = data.tar; sourceTree = "<group>"; };
 		75300F221FE43948008C375D /* bootstrap.tar */ = {isa = PBXFileReference; lastKnownFileType = archive.tar; path = bootstrap.tar; sourceTree = "<group>"; };
 		75300F251FE439E3008C375D /* reload */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = reload; sourceTree = "<group>"; };
 		75300F261FE439E3008C375D /* launchctl */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = launchctl; sourceTree = "<group>"; };
 		7543BE711FDF24F50006745F /* jailbreak.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jailbreak.h; sourceTree = "<group>"; };
 		7543BE721FDF24F50006745F /* patchfinder64_11.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = patchfinder64_11.h; sourceTree = "<group>"; };
 		7543BE741FDF24F50006745F /* jailbreak.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = jailbreak.m; sourceTree = "<group>"; };
-		7543BE751FDF24F50006745F /* patchfinder64_11.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = patchfinder64_11.c; sourceTree = "<group>"; };
+		7543BE751FDF24F50006745F /* patchfinder64_11.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = patchfinder64_11.m; sourceTree = "<group>"; };
 		7543BE761FDF24F50006745F /* libjb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libjb.a; sourceTree = "<group>"; };
 		7543BE771FDF24F50006745F /* libjb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libjb.h; sourceTree = "<group>"; };
-		75D4B0731FE4524B005BF959 /* bootstrap */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bootstrap; sourceTree = "<group>"; };
 		B003EB331FC583CA00C58441 /* kmem.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = kmem.c; sourceTree = "<group>"; };
 		B003EB341FC583CA00C58441 /* kmem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = kmem.h; sourceTree = "<group>"; };
 		B003EB361FC5863800C58441 /* find_port.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = find_port.c; sourceTree = "<group>"; };
@@ -61,7 +63,6 @@
 		B07A02401FB09B6F0018ACE5 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		B07A02431FB09B6F0018ACE5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B07A02451FB09B6F0018ACE5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		B07A02481FB09B6F0018ACE5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B07A024A1FB09B6F0018ACE5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B07A024B1FB09B6F0018ACE5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B07A02521FB09C3D0018ACE5 /* async_wake.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = async_wake.m; sourceTree = "<group>"; };
@@ -98,7 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				7543BE721FDF24F50006745F /* patchfinder64_11.h */,
-				7543BE751FDF24F50006745F /* patchfinder64_11.c */,
+				7543BE751FDF24F50006745F /* patchfinder64_11.m */,
 				7543BE711FDF24F50006745F /* jailbreak.h */,
 				7543BE741FDF24F50006745F /* jailbreak.m */,
 				7543BE761FDF24F50006745F /* libjb.a */,
@@ -127,12 +128,13 @@
 		B07A023B1FB09B6F0018ACE5 /* async_wake_ios */ = {
 			isa = PBXGroup;
 			children = (
-				75D4B0731FE4524B005BF959 /* bootstrap */,
-				7518FFB11FDF22F60004F348 /* bootstrap.dmg */,
 				75300F221FE43948008C375D /* bootstrap.tar */,
-				75300F211FE43948008C375D /* tar */,
+				30A93B611FE4C3F6001AE23A /* data.tar */,
 				75300F261FE439E3008C375D /* launchctl */,
 				75300F251FE439E3008C375D /* reload */,
+				30A93B5A1FE4763E001AE23A /* uicache */,
+				30A93B5C1FE4C04C001AE23A /* Cydia */,
+				30A93B5E1FE4C0F3001AE23A /* xx.plist */,
 				7543BE701FDF24F50006745F /* extra_recipe */,
 				B07A023C1FB09B6F0018ACE5 /* AppDelegate.h */,
 				B07A023D1FB09B6F0018ACE5 /* AppDelegate.m */,
@@ -140,7 +142,6 @@
 				B07A02401FB09B6F0018ACE5 /* ViewController.m */,
 				B07A02421FB09B6F0018ACE5 /* Main.storyboard */,
 				B07A02451FB09B6F0018ACE5 /* Assets.xcassets */,
-				B07A02471FB09B6F0018ACE5 /* LaunchScreen.storyboard */,
 				B07A024A1FB09B6F0018ACE5 /* Info.plist */,
 				B07A024B1FB09B6F0018ACE5 /* main.m */,
 				B07A02521FB09C3D0018ACE5 /* async_wake.m */,
@@ -224,14 +225,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0D79D621FDED41000B4F233 /* README in Resources */,
-				B07A02491FB09B6F0018ACE5 /* LaunchScreen.storyboard in Resources */,
-				75D4B0741FE4524B005BF959 /* bootstrap in Resources */,
 				B07A02461FB09B6F0018ACE5 /* Assets.xcassets in Resources */,
+				30A93B5F1FE4C0F3001AE23A /* xx.plist in Resources */,
+				30A93B621FE4C3F6001AE23A /* data.tar in Resources */,
 				B07A02441FB09B6F0018ACE5 /* Main.storyboard in Resources */,
-				75300F231FE43948008C375D /* tar in Resources */,
 				75300F241FE43948008C375D /* bootstrap.tar in Resources */,
+				30A93B5B1FE4763F001AE23A /* uicache in Resources */,
 				75300F271FE439E4008C375D /* reload in Resources */,
 				75300F281FE439E4008C375D /* launchctl in Resources */,
+				30A93B5D1FE4C04C001AE23A /* Cydia in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,7 +246,7 @@
 			files = (
 				B003EB351FC583CB00C58441 /* kmem.c in Sources */,
 				B0EF11171FCC784B00C1D14E /* symbols.c in Sources */,
-				7543BE7B1FDF24F50006745F /* patchfinder64_11.c in Sources */,
+				7543BE7B1FDF24F50006745F /* patchfinder64_11.m in Sources */,
 				B07A02411FB09B6F0018ACE5 /* ViewController.m in Sources */,
 				B04E25091FCD6DB300F09CCE /* kutils.c in Sources */,
 				B07A024C1FB09B6F0018ACE5 /* main.m in Sources */,
@@ -267,14 +269,6 @@
 				B07A02431FB09B6F0018ACE5 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		B07A02471FB09B6F0018ACE5 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B07A02481FB09B6F0018ACE5 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -393,7 +387,7 @@
 				DEVELOPMENT_TEAM = D34X7XXW5V;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = async_wake_ios/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -420,7 +414,7 @@
 				DEVELOPMENT_TEAM = D34X7XXW5V;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = async_wake_ios/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

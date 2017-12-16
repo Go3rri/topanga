@@ -17,8 +17,6 @@
 #include <errno.h>
 #include <dirent.h>
 
-
-
 mach_port_t tfp0 = MACH_PORT_NULL;
 
 kern_return_t mach_vm_read_overwrite(vm_map_t target_task, mach_vm_address_t address, mach_vm_size_t size, mach_vm_address_t data, mach_vm_size_t *outsize);
@@ -151,6 +149,34 @@ uint64_t get_proc_for_pid(pid_t target_pid) {
     return -1; // we failed :/
 }
 
+/*
+ * Purpose: iterates over the procs and finds a pid with given name
+ */
+pid_t get_pid_for_name(char *name) {
+    
+    uint64_t task_self = task_self_addr();
+    uint64_t struct_task = rk64(task_self + koffset(KSTRUCT_OFFSET_IPC_PORT_IP_KOBJECT));
+    
+    
+    while (struct_task != 0) {
+        uint64_t bsd_info = rk64(struct_task + koffset(KSTRUCT_OFFSET_TASK_BSD_INFO));
+        
+        char comm[MAXCOMLEN+1];
+        kread(bsd_info + 0x268 /* KSTRUCT_OFFSET_PROC_COMM (is this iPhone X offset??) */, comm, 17);
+        
+        if(strstr(name, comm)) {
+            // get the process pid
+            uint32_t pid = rk32(bsd_info + koffset(KSTRUCT_OFFSET_PROC_PID));
+            
+            return (pid_t)pid;
+        }
+        
+        struct_task = rk64(struct_task + koffset(KSTRUCT_OFFSET_TASK_PREV));
+    }
+    return -1; // we failed :/
+}
+
+
 uint64_t our_proc = 0;
 uint64_t our_cred = 0;
 
@@ -208,12 +234,18 @@ kern_return_t mount_rootfs() {
     
     uint64_t rootvnode = find_rootvnode();
     printf("_rootvnode: %llx (%llx)\n", rootvnode, rootvnode - kaslr_slide);
+    
+    if(rootvnode == 0) {
+        ret = KERN_FAILURE;
+        return ret;
+    }
+    
     uint64_t rootfs_vnode = kread_uint64(rootvnode);
     printf("rootfs_vnode: %llx\n", rootfs_vnode);
     uint64_t v_mount = kread_uint64(rootfs_vnode + 0xd8);
     printf("v_mount: %llx (%llx)\n", v_mount, v_mount - kaslr_slide);
     uint32_t v_flag = kread_uint32(v_mount + 0x71);
-    printf("v_flag: %llx (%llx)\n", v_flag, v_flag - kaslr_slide);
+    printf("v_flag: %x (%llx)\n", v_flag, v_flag - kaslr_slide);
     kwrite_uint32(v_mount + 0x71, v_flag & ~(1 << 6));
 
     set_uid0();
@@ -226,12 +258,8 @@ kern_return_t mount_rootfs() {
     } else {
         printf("[INFO]: successfully mounted '/'\n");
     }
-    FILE *file = fopen("/Applications/lolol", "w");
-    if(file != NULL){
-        printf("HOLY SHIT!!\n");
-    }
     
-    set_cred_back();
+
     return ret;
 }
 
@@ -244,92 +272,61 @@ kern_return_t unpack_bootstrap() {
     _NSGetExecutablePath(path, &size);
     char *pt = realpath(path, NULL);
     
-    pid_t pd = 0;
     NSString *execpath = [[NSString stringWithUTF8String:pt] stringByDeletingLastPathComponent];
 
-    NSString *tar = [execpath stringByAppendingPathComponent:@"tar"];
-    NSString *bootstrap = [execpath stringByAppendingPathComponent:@"bootstrap/Applications/Cydia.app"];
-    NSString *launchctl = [execpath stringByAppendingPathComponent:@"launchctl"];
-    const char *jl;
-    
+    NSString *bootstrap_path = [execpath stringByAppendingPathComponent:@"bootstrap.tar"];
+
     set_uid0();
     
-    NSError *copyError = nil;
-    if (![[NSFileManager defaultManager] copyItemAtPath:bootstrap toPath:@"/Applications/Cydia.app" error:&copyError]) {
-        NSLog(@"Error copying files: %@", [copyError localizedDescription]);
+    if(([[NSFileManager defaultManager] fileExistsAtPath:@"/Applications/Cydia.app"]) == NO) {
+        chdir("/");
+        FILE *bootstrap = fopen([bootstrap_path UTF8String], "r");
+        untar(bootstrap, "/");
+        fclose(bootstrap);
     }
+ 
+    chdir("/");
+    FILE *bootstrap = fopen([[execpath stringByAppendingPathComponent:@"data.tar"] UTF8String], "r");
+    untar(bootstrap, "/");
+    fclose(bootstrap);
     
-    char * original_dir_path = "/Applications/";
+    printf("[INFO]: finished installing bootstrap and friends\n");
     
+    uint64_t trust_chain = find_trustcache();
+    uint64_t amficache = find_amficache();
     
-            DIR *mydir;
-            struct dirent *myfile;
+    printf("trust_chain = 0x%llx\n", trust_chain);
+    printf("amficache = 0x%llx\n", amficache);
     
-            int fd = open(original_dir_path, O_RDONLY, 0);
+    struct trust_mem mem;
+    mem.next = kread_uint64(trust_chain);
+    *(uint64_t *)&mem.uuid[0] = 0xabadbabeabadbabe;
+    *(uint64_t *)&mem.uuid[8] = 0xabadbabeabadbabe;
     
-            mydir = fdopendir(fd);
-            while((myfile = readdir(mydir)) != NULL) {
-    
-                if(strcmp(myfile->d_name, ".") == 0 || strcmp(myfile->d_name, "..") == 0)
-                    continue;
-    
-                printf("[CPBBB]: %s\n", myfile->d_name);
-            }
-    
-    
-    printf("dooone~\n");
-    return KERN_SUCCESS;
-    chdir("/tmp/");
-    printf("done chrdir\n");
-    sleep(5);
-    jl = "/tmp/tar";
-    
-    copyfile([tar UTF8String], jl, 0, COPYFILE_ALL);
-    printf("done copyfile\n");
-    sleep(5);
-    chmod(jl, 0755);
-    printf("done chmod\n");
-    sleep(5);
-    posix_spawn(&pd, jl, NULL, NULL, (char **)&(const char*[]){ jl, "--preserve-permissions", "--no-overwrite-dir", "-xvf", [bootstrap UTF8String], NULL }, NULL);
-    printf("done posix_spawn\n");
-    printf("tar's pid = %d\n", pd);
-    
-    {
-        int tries = 3;
-        while (tries-- > 0) {
-            sleep(1);
-            uint64_t proc = kread_uint64(0xFFFFFFF007673D68 + kaslr_slide);
-            while (proc) {
-                uint32_t pid = kread_uint32(proc + koffset(KSTRUCT_OFFSET_PROC_PID));
-                printf("lol: %d", pid);
-                if (pid == pd) {
-                    uint32_t csflags = kread_uint32(proc + 0x2a8 /* csflags */);
-                    csflags = (csflags | CS_PLATFORM_BINARY | CS_INSTALLER | CS_GET_TASK_ALLOW) & ~(CS_RESTRICT | CS_KILL | CS_HARD);
-                    kwrite_uint32(proc  + 0x2a8 /* csflags */, csflags);
-                    printf("empower\n");
-                    tries = 0;
-                    break;
-                }
-                proc = kread_uint64(proc);
-            }
-        }
-    }
-    
-    waitpid(pd, NULL, 0);
-    
+    copyfile([[execpath stringByAppendingPathComponent:@"Cydia"] UTF8String], "/Applications/Cydia.app/Cydia", 0, COPYFILE_ALL);
+    chmod("/Applications/Cydia.app/Cydia", 0777);
 
-    jl = "/tmp/bin/launchctl";
-    copyfile([launchctl UTF8String], jl, 0, COPYFILE_ALL);
-    printf("done copyfile2\n");
-    sleep(5);
-    chmod(jl, 0755);
-    printf("done chmod2\n");
-    sleep(5);
-    posix_spawn(&pd, jl, NULL, NULL, (char **)&(const char*[]){ jl, "load", "/tmp/Library/LaunchDaemons", NULL }, NULL);
-    printf("done posix_spawn2\n");
-    sleep(5);
-    NSLog(@"pid = %x", pd);
-    waitpid(pd, NULL, 0);
+//    copyfile([[execpath stringByAppendingPathComponent:@"xx.plist"] UTF8String], "/Applications/Cydia.app/Info.plist", 0, COPYFILE_ALL);
+//    chmod("/Applications/Cydia.app/Info.plist", 0777);
+    
+    int rv = grab_hashes("/Applications/Cydia.app", kread, amficache, mem.next);
+    printf("rv = %d, numhash = %d\n", rv, numhash);
+    
+    size_t length = (sizeof(mem) + numhash * 20 + 0xFFFF) & ~0xFFFF;
+    uint64_t kernel_trust = 0;
+    
+    kern_return_t mach_vm_allocate(vm_map_t target, mach_vm_address_t *address, mach_vm_size_t size, int flags);
+    mach_vm_allocate(tfp0, (mach_vm_address_t *)&kernel_trust, length, VM_FLAGS_ANYWHERE);;
+    printf("alloced: 0x%zx => 0x%llx\n", length, kernel_trust);
+    
+    mem.count = numhash;
+    kwrite(kernel_trust, &mem, sizeof(mem));
+    kwrite(kernel_trust + sizeof(mem), allhash, numhash * 20);
+    kwrite_uint64(trust_chain, kernel_trust);
+    
+    free(allhash);
+    free(allkern);
+    free(amfitab);
     
     return ret;
 }

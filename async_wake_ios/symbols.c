@@ -148,10 +148,15 @@ uint64_t ksym(enum ksymbol sym) {
 
 int have_syms = 0;
 int probably_have_correct_symbols() {
+
+    return have_syms;
+}
+
+
+void set_kernel_base_slide() {
     
     kernel_base = find_kernel_base();
     kaslr_slide = find_kernel_base() - 0xFFFFFFF007004000;
-    return have_syms;
 }
 
 void offsets_init() {
