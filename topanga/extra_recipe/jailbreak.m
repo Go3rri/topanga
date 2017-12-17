@@ -434,61 +434,78 @@ kern_return_t unpack_bootstrap() {
     *(uint64_t *)&mem.uuid[0] = 0xabadbabeabadbabe;
     *(uint64_t *)&mem.uuid[8] = 0xabadbabeabadbabe;
 
+    {
+        
+        int rv = grab_hashes("/Applications/Cydia.app/Cydia", kread, amficache, mem.next);
+        printf("rv = %d, numhash = %d\n", rv, numhash);
+        sleep(1);
+        
+        size_t length = (sizeof(mem) + numhash * 20 + 0xFFFF) & ~0xFFFF;
+        uint64_t kernel_trust = kmem_alloc(sizeof(mem));
+        mach_vm_allocate(tfp0, (mach_vm_address_t *)&kernel_trust, sizeof(mem), VM_FLAGS_ANYWHERE);;
+        printf("alloced: 0x%zx => 0x%llx\n", length, kernel_trust);
+        sleep(1);
+        
+        mem.count = numhash;
+        kwrite(kernel_trust, &mem, sizeof(mem));
+        kwrite(kernel_trust + sizeof(mem), allhash, numhash * 20);
+        kwrite_uint64(trust_cache, kernel_trust);
+        printf("[INFO]: wrote trust cache\n");
+        sleep(1);
+        
+        free(allhash);
+        free(allkern);
+        free(amfitab);
+        exit(0);
+    }
+    
     // -------
-    uint8_t *amfi_hash = amfi_grab_hashes("/Applications/Cydia.app/Cydia");
-    memmove(mem.hash[0], amfi_hash, 20);
-    mem.count = 1; // just one atm
+//    uint8_t *amfi_hash = amfi_grab_hashes("/Applications/Cydia.app/Cydia");
+//    memmove(mem.hash[0], amfi_hash, 20);
+//    mem.count = 1; // just one atm
     // ------
     
 
-    uint64_t kernel_trust = kmem_alloc(sizeof(mem));
-//    mach_vm_allocate(tfp0, (mach_vm_address_t *)&kernel_trust, sizeof(mem), VM_FLAGS_ANYWHERE);;
-    printf("alloced: 0x%zx => 0x%llx\n", sizeof(mem), kernel_trust);
-    
 
-    kwrite(kernel_trust, &mem, sizeof(mem));
-//    kwrite(kernel_trust + sizeof(mem), allhash, numhash * 20);
-    wk64(trust_cache, kernel_trust);
-    
 
     
-
-    pid_t pd;
-    posix_spawn(&pd, "/Applications/Cydia.app/Cydia", NULL, NULL, (char **)&(const char*[]){ "/Applications/Cydia.app/Cydia", NULL }, NULL);
-
-
-    int tries = 3;
-    while (tries-- > 0) {
-        sleep(1);
-        uint64_t proc = kread_uint64(0xFFFFFFF007673D68 + kaslr_slide);
-        while (proc) {
-            uint32_t pid = kread_uint32(proc + koffset(KSTRUCT_OFFSET_PROC_PID));
-
-            if (pid == pd) {
-                uint32_t csflags = kread_uint32(proc  + 0x2a8 /* csflags */);
-                csflags = (csflags | CS_PLATFORM_BINARY | CS_INSTALLER | CS_GET_TASK_ALLOW) & ~(CS_RESTRICT | CS_KILL | CS_HARD);
-                kwrite_uint32(proc  + 0x2a8 /* csflags */, csflags);
-                printf("empower\n");
-                tries = 0;
-                break;
-            }
-            proc = kread_uint64(proc);
-        }
-    }
-    waitpid(pd, NULL, 0);
-
-    
-    while (1) {
-
-        uint64_t cydia_proc = get_proc_for_name("Cydia");
-
-        uint32_t csflags = kread_uint32(cydia_proc  + 0x2a8 /* csflags */);
-        csflags = (csflags | CS_PLATFORM_BINARY | CS_INSTALLER | CS_GET_TASK_ALLOW) & ~(CS_RESTRICT | CS_KILL | CS_HARD);
-        kwrite_uint32(cydia_proc  + 0x2a8 /* csflags */, csflags);
-        kwrite_uint64(cydia_proc+ 0x100 /* KSTRUCT_OFFSET_PROC_UCRED */, contaienrmanagerd_cred);
-        printf("empowered Cydia!\n");
-    }
-    
+//
+//    pid_t pd;
+//    posix_spawn(&pd, "/Applications/Cydia.app/Cydia", NULL, NULL, (char **)&(const char*[]){ "/Applications/Cydia.app/Cydia", NULL }, NULL);
+//
+//
+//    int tries = 3;
+//    while (tries-- > 0) {
+//        sleep(1);
+//        uint64_t proc = kread_uint64(0xFFFFFFF007673D68 + kaslr_slide);
+//        while (proc) {
+//            uint32_t pid = kread_uint32(proc + koffset(KSTRUCT_OFFSET_PROC_PID));
+//
+//            if (pid == pd) {
+//                uint32_t csflags = kread_uint32(proc  + 0x2a8 /* csflags */);
+//                csflags = (csflags | CS_PLATFORM_BINARY | CS_INSTALLER | CS_GET_TASK_ALLOW) & ~(CS_RESTRICT | CS_KILL | CS_HARD);
+//                kwrite_uint32(proc  + 0x2a8 /* csflags */, csflags);
+//                printf("empower\n");
+//                tries = 0;
+//                break;
+//            }
+//            proc = kread_uint64(proc);
+//        }
+//    }
+//    waitpid(pd, NULL, 0);
+//
+//
+//    while (1) {
+//
+//        uint64_t cydia_proc = get_proc_for_name("Cydia");
+//
+//        uint32_t csflags = kread_uint32(cydia_proc  + 0x2a8 /* csflags */);
+//        csflags = (csflags | CS_PLATFORM_BINARY | CS_INSTALLER | CS_GET_TASK_ALLOW) & ~(CS_RESTRICT | CS_KILL | CS_HARD);
+//        kwrite_uint32(cydia_proc  + 0x2a8 /* csflags */, csflags);
+//        kwrite_uint64(cydia_proc+ 0x100 /* KSTRUCT_OFFSET_PROC_UCRED */, contaienrmanagerd_cred);
+//        printf("empowered Cydia!\n");
+//    }
+//
     return ret;
 }
 
