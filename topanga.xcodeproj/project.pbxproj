@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		30A93B5B1FE4763F001AE23A /* uicache in Resources */ = {isa = PBXBuildFile; fileRef = 30A93B5A1FE4763E001AE23A /* uicache */; };
 		30A93B641FE4D45F001AE23A /* bootstrap.tar in Resources */ = {isa = PBXBuildFile; fileRef = 30A93B631FE4D45E001AE23A /* bootstrap.tar */; };
 		30A93B661FE59154001AE23A /* utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 30A93B651FE59153001AE23A /* utilities.m */; };
 		30A93B681FE59BAB001AE23A /* cydia64.tar in Resources */ = {isa = PBXBuildFile; fileRef = 30A93B671FE59BAA001AE23A /* cydia64.tar */; };
@@ -33,7 +32,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		30A93B5A1FE4763E001AE23A /* uicache */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = uicache; sourceTree = "<group>"; };
 		30A93B631FE4D45E001AE23A /* bootstrap.tar */ = {isa = PBXFileReference; lastKnownFileType = archive.tar; path = bootstrap.tar; sourceTree = "<group>"; };
 		30A93B651FE59153001AE23A /* utilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = utilities.m; sourceTree = "<group>"; };
 		30A93B671FE59BAA001AE23A /* cydia64.tar */ = {isa = PBXFileReference; lastKnownFileType = archive.tar; path = cydia64.tar; sourceTree = "<group>"; };
@@ -134,7 +132,6 @@
 				30A93B671FE59BAA001AE23A /* cydia64.tar */,
 				75300F261FE439E3008C375D /* launchctl */,
 				75300F251FE439E3008C375D /* reload */,
-				30A93B5A1FE4763E001AE23A /* uicache */,
 				7543BE701FDF24F50006745F /* extra_recipe */,
 				B07A023C1FB09B6F0018ACE5 /* AppDelegate.h */,
 				B07A023D1FB09B6F0018ACE5 /* AppDelegate.m */,
@@ -226,7 +223,6 @@
 				30A93B641FE4D45F001AE23A /* bootstrap.tar in Resources */,
 				B07A02461FB09B6F0018ACE5 /* Assets.xcassets in Resources */,
 				B07A02441FB09B6F0018ACE5 /* Main.storyboard in Resources */,
-				30A93B5B1FE4763F001AE23A /* uicache in Resources */,
 				30A93B681FE59BAB001AE23A /* cydia64.tar in Resources */,
 				75300F271FE439E4008C375D /* reload in Resources */,
 				75300F281FE439E4008C375D /* launchctl in Resources */,

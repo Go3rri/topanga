@@ -23,18 +23,15 @@
 
 #include <CommonCrypto/CommonDigest.h>
 
-#define CSMAGIC_REQUIREMENTS        0xfade0c01
-#define CSMAGIC_CODEDIRECTORY       0xfade0c02
-
 // taken from xerub's
-//typedef uint8_t hash_t[20];
-//
-//struct trust_mem {
-//    uint64_t next; //struct trust_mem *next;
-//    unsigned char uuid[16];
-//    unsigned int count;
-//    hash_t hash[2];
-//};
+typedef uint8_t hash_t[20];
+
+struct topanga_trust_mem {
+    uint64_t next; //struct trust_mem *next;
+    unsigned char uuid[16];
+    unsigned int count;
+    hash_t hash[2];
+};
 
 
 extern uint64_t kernel_base;
@@ -47,7 +44,8 @@ pid_t get_pid_for_name(char *proc_name);
 
 kern_return_t mount_rootfs(void);
 kern_return_t unpack_bootstrap(void);
-uint8_t *amfi_grab_hashes(const char *path);
+kern_return_t trust_path(char const *path);
+kern_return_t run_path(char const *path);
 kern_return_t go_kppless(void);
 
 #endif /* jailbreak_h */

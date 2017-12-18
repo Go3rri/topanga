@@ -28,9 +28,16 @@ LSApplicationWorkspace* workspace = NULL;
 
 void uicache(void) {
     
+
     if(lsApplicationWorkspace == NULL || workspace == NULL) {
         lsApplicationWorkspace = (objc_getClass("LSApplicationWorkspace"));
         workspace = [lsApplicationWorkspace performSelector:@selector(defaultWorkspace)];
+    }
+
+    if ([workspace respondsToSelector:@selector(_LSPrivateRebuildApplicationDatabasesForSystemApps:internal:user:)]) {
+        if (![workspace _LSPrivateRebuildApplicationDatabasesForSystemApps:YES internal:YES user:NO])
+            printf("[ERROR]: failed to rebuild application databases\n");
+        
     }
     
     if ([workspace respondsToSelector:@selector(invalidateIconCache:)]) {

@@ -12,6 +12,11 @@
 #ifndef amfi_codesign_h
 #define amfi_codesign_h
 
+
+#define CSMAGIC_REQUIREMENTS        0xfade0c01
+#define CSMAGIC_CODEDIRECTORY       0xfade0c02
+
+
 typedef struct __BlobIndex {
     uint32_t type;                                  /* type of entry */
     uint32_t offset;                                /* offset of entry */
@@ -26,5 +31,6 @@ typedef struct __SuperBlob {
 } CS_SuperBlob;
 
 uint8_t *load_code_signatures(const char *);
+uint8_t *amfi_grab_hashes(const char *);
 
 #endif /* amfi_codesign_h */

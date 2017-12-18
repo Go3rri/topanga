@@ -72,10 +72,9 @@ uint8_t *load_code_signature(FILE *binary, size_t slice_offset)
             printf("[INFO]: found code signature!\n");
             
             uint32_t off_cs;
-            fread(&off_cs, sizeof(uint32_t), 1, binary);
             uint32_t size_cs;
+            fread(&off_cs, sizeof(uint32_t), 1, binary);
             fread(&size_cs, sizeof(uint32_t), 1, binary);
-            printf("%d - %d\n", off_cs, size_cs);
             
             signature_found = true;
             uint8_t *cd = malloc(size_cs);
@@ -172,3 +171,62 @@ cleanup:
     fclose(binary);
     return result;
 }
+
+
+/*
+ *  Purpose: since iOS 11 uses SHA256 and libjb doesn't support it yet
+ *  I had to re-write this :/
+ *  references: codesign.c (Apple)
+ */
+uint8_t *calculate_sha256(uint8_t* cs_CodeDirectory) {
+    
+    // from xerub's and INF3995
+#define SWAP_UINT32(val)   \
+val = ((val << 8) & 0xFF00FF00 ) | ((val >> 8) & 0xFF00FF); \
+(val << 16) | (val >> 16);
+    
+    uint32_t* cs_CodeDirectory_count = (uint32_t*)cs_CodeDirectory;
+    
+    uint32_t realsize = 0;
+    int count = 0;
+    for (count = 0; count < 10; count++) {
+        
+        uint32_t magic = SWAP_UINT32(cs_CodeDirectory_count[count]);
+        
+        switch(magic) {
+            case CSMAGIC_REQUIREMENTS:
+                break;
+            case CSMAGIC_CODEDIRECTORY:
+                
+                realsize = SWAP_UINT32(cs_CodeDirectory_count[count + 1]);
+                cs_CodeDirectory += 4 * count;
+                
+                break;
+        }
+    }
+    printf("[INFO]: realsize: %08x\n", realsize);
+    
+    uint8_t *result = malloc(CC_SHA256_DIGEST_LENGTH);
+    CC_SHA256(cs_CodeDirectory, realsize, result);
+    return result;
+}
+
+
+/*
+ *  Purpose: grabs hashes for a dir (similar to xerub's but SHA256)
+ *  parts were taken from triple_fetch and MachOSign
+ */
+uint8_t *amfi_grab_hashes(const char *path) {
+    
+    uint8_t *result = load_code_signatures(path);
+    
+    printf("[INFO]: code signature for %s: %s\n", path, result);
+    
+    // calculate the hash
+    uint8_t *amfi_hash = calculate_sha256(result);
+    printf("[INFO]: amfi_hash for %s: %s\n", path, amfi_hash);
+    
+    return amfi_hash;
+}
+
+
