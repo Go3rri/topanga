@@ -465,7 +465,7 @@ kern_return_t trust_path(char const *path) {
     
     kern_return_t ret = KERN_SUCCESS;
     
-//#define USE_LIBJB
+#define USE_LIBJB
 #ifdef USE_LIBJB
     
     struct trust_mem mem;
